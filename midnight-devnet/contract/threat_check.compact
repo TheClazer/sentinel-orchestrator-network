@@ -1,0 +1,36 @@
+// =============================================================================
+// Sentinel Orchestrator Network (SON) - Threat Check ZK Circuit
+// =============================================================================
+//
+// This is the Midnight Compact contract for privacy-preserving threat
+// verification. It allows agents to prove that a vulnerability exists
+// without revealing the actual exploit code.
+//
+// Purpose:
+// - Certifies "I know a vulnerability exists, but I won't show how to exploit it"
+// - Protects agent intellectual property (detection algorithms)
+// - Enables trustless verification without exposing sensitive data
+//
+// Owner: Member 4 (The Ghost)
+// Technology: Midnight Compact Language
+//
+// =============================================================================
+
+// TODO: Implement actual Midnight Compact contract
+// Example structure:
+//
+// contract ThreatVerifier {
+//     ledger risk_found: Boolean;
+//     ledger risk_score: Cell<Uint<8>>;
+//     
+//     transition verify(witness: Boolean, score: Uint<8>) {
+//         if (witness) {
+//             risk_found = true;
+//             risk_score = score;
+//         }
+//     }
+//     
+//     circuit prove_threat(private finding: Boolean) -> Boolean {
+//         return finding;
+//     }
+// }
