@@ -1,25 +1,42 @@
-"""
-=============================================================================
-Sentinel Orchestrator Network (SON) - Main Backend Entry Point
-=============================================================================
+from fastapi import FastAPI, WebSocket, BackgroundTasks
+from pydantic import BaseModel
+from backend.message_bus import MessageBus
+import uuid
+import logging
 
-This is the FastAPI entry point for the SON backend orchestrator.
-It serves as the central hub that:
-- Receives scan requests from the frontend via REST API
-- Initiates the CrewAI multi-agent workflow
-- Manages WebSocket connections for real-time log streaming
-- Coordinates with Hydra and Midnight infrastructure
-- Handles authentication and request validation
+# Initialize Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-Owner: Member 1 (The Architect)
-Technology: FastAPI, Uvicorn, AsyncIO
-Runs on: http://localhost:8000
+# Initialize FastAPI
+app = FastAPI()
 
-=============================================================================
-"""
+# Initialize MessageBus
+message_bus = MessageBus()
 
-# TODO: Implement FastAPI application with CORS for localhost:3000
-# TODO: Add POST /api/v1/scan endpoint
-# TODO: Add WebSocket /ws/logs/{task_id} endpoint
-# TODO: Integrate with routers/scan.py
-# TODO: Add logging for observability events
+class ScanRequest(BaseModel):
+    policy_id: str
+
+async def mock_sentinel_agent(policy_id: str, task_id: str):
+    """
+    Mock Sentinel Agent logic.
+    In a real scenario, this would perform the scan and publish results to the MessageBus.
+    """
+    logger.info(f"Sentinel Agent triggered for policy: {policy_id}, task_id: {task_id}")
+    # Here we would normally publish messages to the bus
+    # await message_bus.publish(...) 
+    pass
+
+@app.post("/api/v1/scan")
+async def scan(request: ScanRequest, background_tasks: BackgroundTasks):
+    task_id = str(uuid.uuid4())
+    logger.info(f"Received scan request for policy_id: {request.policy_id}")
+    
+    # Trigger Sentinel agent (mock)
+    background_tasks.add_task(mock_sentinel_agent, request.policy_id, task_id)
+    
+    return {"status": "scan_initiated", "task_id": task_id}
+
+@app.websocket("/ws/logs/{task_id}")
+async def websocket_endpoint(websocket: WebSocket, task_id: str):
+    await message_bus.subscribe(websocket)

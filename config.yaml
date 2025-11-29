@@ -1,0 +1,13 @@
+applications:
+  - name: sentinel
+    route_prefix: /sentinel
+    import_path: backend.agents.sentinel:app
+  - name: oracle
+    route_prefix: /oracle
+    import_path: backend.agents.oracle:app
+
+runtime_env:
+  pip:
+    - masumi-sdk
+    - blockfrost-python
+    - pynacl
