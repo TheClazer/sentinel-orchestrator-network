@@ -164,7 +164,6 @@ class MessageBus:
                 message, sort_keys=True, separators=(',', ':')
             ).encode('utf-8')
             
-            # Decode signature from base64 (FIXED: always use base64, not hex)
             import base64 as b64
             signature_bytes = b64.b64decode(signature_b64)
             

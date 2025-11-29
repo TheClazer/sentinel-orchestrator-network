@@ -353,6 +353,12 @@ class OracleAgent(BaseAgent):
         # Normalize risk
         overall_risk = weighted_risk / total_weight if total_weight > 0 else 0.0
         
+        # Override risk if severity is high (Single Point of Failure protection)
+        if max_severity == Severity.CRITICAL:
+            overall_risk = max(overall_risk, 0.95)
+        elif max_severity == Severity.HIGH:
+            overall_risk = max(overall_risk, 0.75)
+        
         # Calculate confidence based on specialist success rate
         confidence = successful_count / len(specialist_results) if specialist_results else 0.0
         
